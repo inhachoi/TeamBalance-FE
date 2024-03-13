@@ -1,5 +1,5 @@
 import { createGlobalStyle } from "styled-components";
-const globalStyles = createGlobalStyle`
+const GlobalStyles = createGlobalStyle`
 body {
   background-color: #FFFFFF;
     margin: 0;
@@ -19,4 +19,4 @@ body {
 
 `;
 
-export default globalStyles;
+export default GlobalStyles;
