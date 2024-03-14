@@ -43,30 +43,18 @@ const Main = () => {
     setIsModalOpen(false);
   };
 
-  const handleAddTmi = () => {
-    // if (gameTitle && choiceA && choiceB) {
-    //   const newTmi = {
-    //     gameTitle,
-    //     choiceA,
-    //     choiceB,
-    //   };
-    //   setTmiList([...tmiList, newTmi]);
-    //   setGameTitle("");
-    //   setChoiceA("");
-    //   setChoiceB("");
-    //   closeModal();
-    // } else {
-    //   alert("빈 칸 채워주세요 ㅠㅠ");
-    // }
-    const newTmi = {
-      gameTitle,
-      choiceA,
-      choiceB,
-    };
-    setTmiList([...tmiList, newTmi]);
-    setGameTitle("");
-    setChoiceA("");
-    setChoiceB("");
+  const handleAddTmi = (gameTitle, choiceA, choiceB) => {
+    if (gameTitle && choiceA && choiceB) {
+      const newTmi = {
+        gameTitle,
+        choiceA,
+        choiceB,
+      };
+      setTmiList([...tmiList, newTmi]);
+      closeModal();
+    } else {
+      alert("빈 칸을 채워주세요 ㅠㅠ");
+    }
   };
 
   return (
@@ -114,7 +102,7 @@ const Main = () => {
   );
 };
 
-// 모달
+
 const Modal = ({ onClose, onAddTmi }) => {
   const [gameTitle, setGameTitle] = useState("");
   const [choiceA, setChoiceA] = useState("");
@@ -122,20 +110,16 @@ const Modal = ({ onClose, onAddTmi }) => {
 
   const handleGameTitleChange = (e) => {
     setGameTitle(e.target.value);
-    console.log(gameTitle);
   };
   const handleChoiceAChange = (e) => {
     setChoiceA(e.target.value);
-    console.log(choiceA);
   };
   const handleChoiceBChange = (e) => {
     setChoiceB(e.target.value);
-    console.log(choiceB);
   };
   const handleAddClick = () => {
     onAddTmi(gameTitle, choiceA, choiceB);
   };
-  
 
   return (
     <StModalOverlay>
@@ -173,6 +157,7 @@ const Modal = ({ onClose, onAddTmi }) => {
     </StModalOverlay>
   );
 };
+
 
 // 본문 css
 const StHeader = styled.div`
