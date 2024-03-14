@@ -5,7 +5,7 @@ export const CommentItem = ({ comment }) => {
   return (
 
     <StComment>
-      {comment} <button>x</button>
+      {comment} <button>x</button> 
     </StComment>
    
   );

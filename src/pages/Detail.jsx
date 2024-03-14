@@ -7,12 +7,11 @@ import CommentList from "../components/comments/CommentList";
 
 
 const Detail = () => {
-  return (<div>
-
+  return (<>
 <GameChoicePercent/>
 <CommentList/>
-
-  </div>)
+  </>
+  )
 };
 
 export default Detail;

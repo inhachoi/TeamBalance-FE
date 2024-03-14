@@ -22,7 +22,7 @@ const GameChoicePercent = () => {
     <div>
       <div>Balance Game</div>
       <Container>
-        <Option onClick={() => handleChoice_A("A")}>짜장</Option>{" "}
+        <Option onClick={() => handleChoice_A("A")}>짜장</Option>{""} 
         <VS> vs </VS>
         <Option active onClick={() => handleChoice_B("B")}> 짬뽕</Option>
       </Container>

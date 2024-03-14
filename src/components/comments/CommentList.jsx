@@ -9,7 +9,7 @@ import {StCommentInputForm} from './Comment.module'
 
 export default function CommentList() {
   const [comments, setComments] = useState([]);
-  const [newComment, setNewComment] = useState('');
+  const [newComment, setNewComment] = useState(''); 
 
   const handleCommentChange = (event) => {
     setNewComment(event.target.value);
