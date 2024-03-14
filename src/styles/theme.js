@@ -1,9 +1,9 @@
 const color = {
-  black: "000000",
-  white: "#F0F0F0",
+  black: "#000000",
+  white: "#FFFFFF",
   purple: "#5D47E7",
-  grey: "#1B1F30",
-  lightGrey: "#EFEFEF",
+  gray: "#1B1F30",
+  lightGray: "#EFEFEF",
   softRed: "#FF5858",
   navy: "#111229",
 };
