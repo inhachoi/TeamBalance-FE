@@ -9,6 +9,7 @@ import theme from "../styles/theme";
 const Router = () => {
   return (
     <BrowserRouter>
+
       <ThemeProvider theme={theme}>
         <Routes>
           <Route path="/" element={<Intro />} />
@@ -16,6 +17,7 @@ const Router = () => {
           <Route path="/detail" element={<Detail />} />
         </Routes>
       </ThemeProvider>
+
     </BrowserRouter>
   );
 };
