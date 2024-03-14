@@ -2,10 +2,26 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
+    background: white;
+    padding: 20px;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 10%;
+    border-radius: 33px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 200%;
+    overflow: hidden;
+    flex-direction: column;
+  
+`;
+
+export const OptionContainer = styled.div`
   background: white;
   padding: 20px;
   border-radius: 33px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: center;
   align-items: center;
