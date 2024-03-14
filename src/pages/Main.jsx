@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import Header from "../components/header/Header";
 
 //SECTION - 게임 진입 페이지
 const Main = () => {
@@ -80,14 +81,15 @@ const Main = () => {
 
   return (
     <>
-      <StHeader>
-        {/* 헤더 부분 */}
-        <StLogo src="/teamBalanceLogo.png" />
+      {/* <StHeader> */}
+      {/* 헤더 부분 */}
+      {/* <StLogo src="/teamBalanceLogo.png" />
         <div>
           <StNickName>AA님</StNickName>
           <StLogoutButton>로그아웃</StLogoutButton>
         </div>
-      </StHeader>
+      </StHeader> */}
+      <Header />
 
       <StMainBox>
         {/* 가운데 부분 */}
