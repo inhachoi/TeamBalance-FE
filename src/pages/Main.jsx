@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+
 //SECTION - 게임 진입 페이지
 const Main = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -90,12 +91,12 @@ const Main = () => {
 
       <StMainBox>
         {/* 가운데 부분 */}
-        <h2>&nbsp;&nbsp;&nbsp;&nbsp;TMI 밸런스 게임!</h2>
+        <h2>&nbsp;&nbsp;&nbsp;&nbsp;🎉 오늘의 TMI 밸런스 게임 🎉</h2>
         <StTodayTmiBox>
           <h2>중식중에 뭐가 더 좋아?</h2>
           <div>
             <StTodayTmiChoiceA>짜장면</StTodayTmiChoiceA>
-            <span>VS</span>
+            <StVs>VS</StVs>
             <StTodayTmiChoiceB>짬뽕</StTodayTmiChoiceB>
           </div>
         </StTodayTmiBox>
@@ -103,7 +104,7 @@ const Main = () => {
 
       <StTmiBox>
         {/* 밑 부분 */}
-        <h2>&nbsp;&nbsp;다른 밸런스 게임하러 가기~!</h2>
+        <h2>&nbsp;&nbsp;모든 TMI 밸런스 게임 🔥</h2>
         <div>
           {tmiList.map((tmi, index) => (
             <StTmi key={index}>{tmi.gameTitle}</StTmi>
@@ -208,7 +209,7 @@ const StMainBox = styled.div`
 const StTodayTmiBox = styled.div`
   min-width: 970px;
   text-align: center;
-  padding: 60px 0px 70px 0px;
+  padding: 40px 0px 50px 0px;
   margin: 30px;
   background-color: white;
   border: none;
@@ -226,21 +227,27 @@ const StTodayTmiBox = styled.div`
 const StTodayTmiChoiceA = styled.button`
   width: 400px;
   height: 200px;
-  margin-right: 30px;
+  margin: 40px 30px 30px 0px;
   color: white;
   border: none;
   background-color: #1a1c26;
   border-radius: 20px;
+  font-size: 25px;
   cursor: pointer;
 `;
 const StTodayTmiChoiceB = styled.button`
   width: 400px;
   height: 200px;
-  margin-left: 30px;
+  margin: 40px 0px 30px 30px;
   border: none;
   background-color: #5d47e7;
   border-radius: 20px;
+  font-size: 25px;
   cursor: pointer;
+`;
+const StVs = styled.span`
+  font-size: 30px;
+  font-weight: bold;
 `;
 const StTmiBox = styled.div`
   min-height: 350px;
