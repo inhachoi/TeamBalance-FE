@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import GameChoicePercent from "../components/game/GameChoisePercent";
 import CommentList from "../components/comments/CommentList";
-import { useParams } from "react-router-dom";
+import { useParams } from 'react-router-dom';
+
+
+//SECTION - 게임 결과에 대한 상세 페이지
+
+
 
 const Detail = () => {
   const { id } = useParams();
@@ -25,7 +30,8 @@ const Detail = () => {
   };
 
   if (!gameInfo) {
-    return <div>Loading...</div>;
+    return <div>  <GameChoicePercent gameInfo={gameInfo} />
+    <CommentList gameId={id} /></div>;
   }
 
   return (

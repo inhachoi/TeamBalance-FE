@@ -5,7 +5,7 @@ import { CommentItem } from './CommentItem';
 import { StCommentsSection, StCommentInput, StItemSection, StCommentInputForm, StTogglebutton } from './Comment.module';
 
 const fetchComments = async (id) => {
-  const response = await fetch(`/api/game/${id}/comment`);
+  const response = await fetch(`http://52.78.86.206:8080/api/game/${id}/comment`);
   if (!response.ok) {
     throw new Error('Failed to fetch comments');
   }
@@ -13,7 +13,7 @@ const fetchComments = async (id) => {
 };
 
 const submitComment = async (id, newComment) => {
-  const response = await fetch(`/api/game/${id}/comment`, {
+  const response = await fetch(`http://52.78.86.206:8080/api/game/${id}/comment`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -80,7 +80,7 @@ export default function CommentList({ id }) {
         >
           <StItemSection>
             {comments.map((comment, index) => (
-              <CommentItem key={index} id={id} email={comment.email} body={comment.body} />
+              <CommentItem key={index} id={comment} body={comment.body} />
             ))}
           </StItemSection>
         </Scrollbars>
