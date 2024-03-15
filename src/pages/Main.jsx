@@ -12,11 +12,12 @@ import {
   // StTmiDeleteButton,
   StAddModalOpenButton,
   StModalOverlay,
-  StModalBox,
+  StModalForm, // 수정: StModalForm으로 변경
   StModalCloseButton,
   StModalInput,
   StTmiAddButton,
 } from "./Main.module";
+import { useQuery, useMutation, QueryClient } from "@tanstack/react-query";
 
 //SECTION - 게임 진입 페이지
 const Main = () => {
@@ -26,8 +27,6 @@ const Main = () => {
     choiceA: "",
     choiceB: "",
   });
-
-  const [tmiList, setTmiList] = useState([]);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -45,43 +44,45 @@ const Main = () => {
     });
   };
 
-  // api 게임 추가
-  const handleAddTmi = async () => {
+  const queryClient = new QueryClient();
+
+  // 게임 리스트 받아오기
+  const getTmiGames = async () => {
+    const response = await api.get("/games");
+    return response.data; // 수정: response.data로 수정
+  };
+
+  const { data, isLoading, isError } = useQuery("games", getTmiGames); // 수정: 인수로 객체 형식의 옵션 전달
+
+  // 게임 추가
+  const addGame = async (value) => {
     try {
-      const response = await api.post("/api/games", values);
-      const newGame = response.data;
-      setTmiList([...tmiList, newGame]);
-      closeModal();
+      const response = await api.post("/game", value);
+      console.log(response);
+      return response.data; // 수정: response.data로 수정
     } catch (error) {
-      console.error("게임 추가 중 에러 발생:", error);
+      console.log(error.response);
     }
   };
 
-  // api로 게임 리스트 받아오기
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await api.get("/games");
-        setTmiList(response.data);
-      } catch (error) {
-        alert("게임 리스트를 불러오는 중 에러가 발생했습니다:", error);
+  const addGameMutation = useMutation(addGame, {
+    // 수정: useMutation 호출 형식 변경
+    onSuccess: (data) => {
+      console.log("게임추가 성공", data);
+      if (data.status === 200) {
+        alert("게임추가 성공!!!");
       }
-    };
+    },
+    onError: (error) => {
+      console.log("게임 추가 오류 : ", error);
+    },
+  });
 
-    fetchData();
-  }, []);
-
-  // api로 게임 삭제
-  const handleDeleteTmi = async (id) => {
-    try {
-      await api.delete(`api/games/${id}`);
-      const updatedTmiList = tmiList.filter((tmi) => tmi.id !== id);
-      setTmiList(updatedTmiList);
-    }catch(error) {
-      alert("게임 삭제 중 에러 발생:", error);
-    }
-  }
-
+  // 게임 삭제
+  const deleteTmiMutation = useMutation((id) => api.delete(`/games/${id}`));
+  const handleDeleteTmi = (id) => {
+    deleteTmiMutation.mutate(id);
+  };
 
   useEffect(() => {
     if (!isModalOpen) {
@@ -92,6 +93,9 @@ const Main = () => {
       });
     }
   }, [isModalOpen]);
+
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error fetching data</div>;
 
   return (
     <>
@@ -114,9 +118,9 @@ const Main = () => {
         {/* 밑 부분 */}
         <h2>&nbsp;&nbsp;모든 TMI 밸런스 게임 🔥</h2>
         <div>
-          {tmiList.map((tmi, index) => (
-            <StTmi key={index}>
-              {tmi.gameTitle}
+          {data.map((item) => (
+            <StTmi key={item.id}>
+              {item.gameTitle}
               {/* <StDeleteButton onClick={() => handleDeleteTmi(tmi.id)}>
                 X
               </StDeleteButton>   */}
@@ -134,7 +138,7 @@ const Main = () => {
       {isModalOpen && (
         <Modal
           onClose={closeModal}
-          onAddTmi={handleAddTmi}
+          onAddTmi={addGameMutation}
           values={values}
           onChange={handleInputChange}
         />
@@ -147,14 +151,17 @@ const Main = () => {
 const Modal = ({ onClose, onAddTmi, values, onChange }) => {
   const { gameTitle, choiceA, choiceB } = values;
 
-  const handleAddClick = () => {
+  const handleFormSubmit = () => {
     onAddTmi();
   };
 
   return (
     <StModalOverlay>
-      <StModalBox>
-        <StModalCloseButton onClick={onClose}>X</StModalCloseButton>
+      <StModalForm onSubmit={handleFormSubmit}>
+        {" "}
+        {/* 수정: form 태그 추가 */}
+        <StModalCloseButton onClick={onClose}>X</StModalCloseButton>{" "}
+        {/* 수정: onSubmit 제거 */}
         <h2>TMI 밸런스 추가</h2>
         <div>
           주 제 &nbsp;
@@ -184,9 +191,10 @@ const Modal = ({ onClose, onAddTmi, values, onChange }) => {
           />
         </div>
         <div>
-          <StTmiAddButton onClick={handleAddClick}>추가하기</StTmiAddButton>
+          <StTmiAddButton type="submit">추가하기</StTmiAddButton>{" "}
+          {/* 수정: type 속성 추가 */}
         </div>
-      </StModalBox>
+      </StModalForm>
     </StModalOverlay>
   );
 };

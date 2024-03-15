@@ -100,7 +100,7 @@ export const StModalOverlay = styled.div`
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
 `;
-export const StModalBox = styled.form`
+export const StModalForm = styled.form`
   position: relative;
   display: flex;
   flex-direction: column;
