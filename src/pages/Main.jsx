@@ -3,6 +3,7 @@ import Header from "../components/header/Header";
 import api from "../axios/api";
 import { tmiGames, addGame } from "../axios/tmiGames";
 import { useQuery, useMutation, QueryClient } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
 import {
   StMainBox,
   StTodayTmiBox,
@@ -54,9 +55,9 @@ const Main = () => {
   // 게임 추가
   const addGameMutation = useMutation({
     mutationFn: (newGame) => {
-      return api.post('/game', newGame)
+      return api.post("/game", newGame);
     },
-  })
+  });
 
   // 게임 삭제
   const deleteTmiMutation = useMutation((id) => api.delete(`/games/${id}`));
@@ -75,13 +76,13 @@ const Main = () => {
   }, [isModalOpen]);
 
   if (isLoading) {
-    console.log(data)
+    console.log(data);
     return <div>Loading...</div>;
-  } 
-  if (isError){
-    console.log(data)
+  }
+  if (isError) {
+    console.log(data);
     return <div>Error fetching data</div>;
-  } 
+  }
 
   return (
     <>
@@ -105,12 +106,14 @@ const Main = () => {
         <h2>&nbsp;&nbsp;모든 TMI 밸런스 게임 🔥</h2>
         <div>
           {data.map((item) => (
-            <StTmi key={item.id}>
-              {item.gameTitle}
-              {/* <StDeleteButton onClick={() => handleDeleteTmi(tmi.id)}>
+            <Link key={item.id} to={`/detail/${item.id}`}>
+              <StTmi>
+                {item.gameTitle}
+                {/* <StDeleteButton onClick={() => handleDeleteTmi(tmi.id)}>
                 X
               </StDeleteButton>   */}
-            </StTmi>
+              </StTmi>
+            </Link>
           ))}
         </div>
       </StTmiBox>
