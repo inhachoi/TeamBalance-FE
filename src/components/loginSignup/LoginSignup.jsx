@@ -9,8 +9,10 @@ import {
   LoginSignupCloseButton,
 } from "./LoginSignup.module";
 import { useMutation } from "@tanstack/react-query";
-import { loginUser, signupUser } from "../../apis/LoginSignupAxios";
+import { loginUser, signupUser } from "../../axios/LoginSignupAxios";
 import { useNavigate } from "react-router-dom";
+import { setLocalStorage } from "../../utils/storageUtils";
+import { setCookie } from "../../utils/cookieUtils";
 
 const LoginSignup = ({ onClose }) => {
   const navigate = useNavigate();
@@ -63,9 +65,9 @@ const LoginSignup = ({ onClose }) => {
   const signupMutation = useMutation({
     mutationFn: signupUser,
     onSuccess: (data) => {
-      console.log("회원가입 성공:", data);
       if (data.status === 200) {
         alert("회원가입에 성공했습니다. 로그인을 한 뒤 게임을 즐기세요!");
+        setIslogin(true);
       }
     },
     onError: (error) => {
@@ -77,16 +79,20 @@ const LoginSignup = ({ onClose }) => {
   const loginMutation = useMutation({
     mutationFn: loginUser,
     onSuccess: (data) => {
-      console.log("로그인 성공 : ", data);
+      const refreshToken = data.data;
+      const accessToken = data.headers.authorization;
       if (data.status === 200) {
-        alert(`${data.data}님 로그인 성공하였습니다. 메인페이지로 이동합니다!`);
+        setLocalStorage(accessToken);
+        setCookie("refreshToken", refreshToken);
+        // alert(`${data.data}님 로그인 성공하였습니다. 메인페이지로 이동합니다!`);
         navigate("/main");
       }
     },
     onError: (error) => {
-      console.log("로그인 실패 : ", error);
+      console.log("로그인 실패 : ", error.status);
     },
   });
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
@@ -105,7 +111,6 @@ const LoginSignup = ({ onClose }) => {
       loginMutation.mutate(userInfo);
     } else {
       // 회원가입 처리
-      console.log(newUserInfo);
       signupMutation.mutate(newUserInfo);
     }
   };

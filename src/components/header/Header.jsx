@@ -9,7 +9,9 @@ import {
 } from "./Heder.module";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
-import { logoutUser } from "../../apis/LoginSignupAxios";
+import { logoutUser } from "../../axios/LoginSignupAxios";
+import { removeCookie } from "../../utils/cookieUtils";
+import { removeLocalStorage } from "../../utils/storageUtils";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -18,6 +20,8 @@ const Header = () => {
     mutationFn: logoutUser,
     onSuccess: (data) => {
       console.log("로그아웃 성공 : ", data);
+      removeCookie("refreshToken");
+      removeLocalStorage("accessToken");
       navigate("/");
       // if (data.status === 200) {
       // }
