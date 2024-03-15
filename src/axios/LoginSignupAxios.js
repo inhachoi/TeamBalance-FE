@@ -25,10 +25,11 @@ export const loginUser = async (userInfo) => {
   }
 };
 
-export const logoutUser = async () => {
+export const logoutUser = async (refreshToken) => {
+  console.log(refreshToken);
   try {
     const response = await instance
-      .post("/user/logout")
+      .post("/user/logout", refreshToken)
       .then((response) => response);
     return response;
   } catch (error) {

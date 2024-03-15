@@ -10,8 +10,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { logoutUser } from "../../axios/LoginSignupAxios";
-import { removeCookie } from "../../utils/cookieUtils";
-import { removeLocalStorage } from "../../utils/storageUtils";
+import { getCookie, removeCookie } from "../../utils/cookieUtils";
+import { getLocalStorage, removeLocalStorage } from "../../utils/storageUtils";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -30,10 +30,11 @@ const Header = () => {
       console.log("로그아웃 실패 ", error);
     },
   });
-  //
+
   const handleLogiutClick = () => {
-    // removeCookie 쿠키 또는 로컬스토리지 토큰 삭제
-    logoutMutaion.mutate();
+    const refreshToken = getCookie("refreshToken");
+    // const refreshToken = "ABASCES";
+    logoutMutaion.mutate(refreshToken);
   };
 
   return (
