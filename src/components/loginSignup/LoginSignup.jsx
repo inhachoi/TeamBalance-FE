@@ -8,20 +8,26 @@ import {
   LoginSignupButton,
   LoginSignupCloseButton,
 } from "./LoginSignup.module";
+import { useMutation } from "@tanstack/react-query";
+import { loginUser, signupUser } from "../../axios/LoginSignupAxios";
+import { useNavigate } from "react-router-dom";
+import { setLocalStorage } from "../../utils/storageUtils";
+import { setCookie } from "../../utils/cookieUtils";
 
 const LoginSignup = ({ onClose }) => {
+  const navigate = useNavigate();
   const [islogin, setIslogin] = useState(true);
-  const [id, setId] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [nickname, setNickname] = useState("");
+  const [username, setUsername] = useState("");
 
   const handleToggle = () => {
     setIslogin(!islogin);
   };
 
-  const validateEmail = (id) => {
+  const validateEmail = (email) => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    return emailRegex.test(id);
+    return emailRegex.test(email);
   };
 
   const validatePassword = (password) => {
@@ -29,9 +35,9 @@ const LoginSignup = ({ onClose }) => {
     return passwordRegex.test(password);
   };
 
-  const handleIdChange = (e) => {
-    const id = e.target.value;
-    setId(id);
+  const handleEmailChange = (e) => {
+    const email = e.target.value;
+    setEmail(email);
   };
 
   const handlePasswordChange = (e) => {
@@ -39,26 +45,58 @@ const LoginSignup = ({ onClose }) => {
     setPassword(password);
   };
 
-  const handleNicknameChange = (e) => {
-    const nickName = e.target.value;
-    setNickname(nickName);
+  const handleUsernameChange = (e) => {
+    const username = e.target.value;
+    setUsername(username);
   };
 
   const newUserInfo = {
-    id,
+    email,
     password,
-    nickname,
+    username,
   };
 
   const userInfo = {
-    id,
+    email,
     password,
   };
 
-  const handleFormSubmit = (e) => {
+  // 회원가입 통신
+  const signupMutation = useMutation({
+    mutationFn: signupUser,
+    onSuccess: (data) => {
+      if (data.status === 200) {
+        alert("회원가입에 성공했습니다. 로그인을 한 뒤 게임을 즐기세요!");
+        setIslogin(true);
+      }
+    },
+    onError: (error) => {
+      console.error("회원가입 실패 : ", error);
+    },
+  });
+
+  // 로그인 통신
+  const loginMutation = useMutation({
+    mutationFn: loginUser,
+    onSuccess: (data) => {
+      const refreshToken = data.data;
+      const accessToken = data.headers.authorization;
+      if (data.status === 200) {
+        setLocalStorage(accessToken);
+        setCookie("refreshToken", refreshToken);
+        // alert(`${data.data}님 로그인 성공하였습니다. 메인페이지로 이동합니다!`);
+        navigate("/main");
+      }
+    },
+    onError: (error) => {
+      console.log("로그인 실패 : ", error.status);
+    },
+  });
+
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
 
-    if (id.trim() !== "" && !validateEmail(id)) {
+    if (email.trim() !== "" && !validateEmail(email)) {
       alert("유효한 이메일 주소를 입력하세요.");
     }
 
@@ -70,11 +108,10 @@ const LoginSignup = ({ onClose }) => {
 
     if (islogin) {
       // 로그인 처리
-      // userInfo로 post 전달
+      loginMutation.mutate(userInfo);
     } else {
       // 회원가입 처리
-      // newUserInfo
-      // newUserInfo로 post 전달
+      signupMutation.mutate(newUserInfo);
     }
   };
 
@@ -88,8 +125,8 @@ const LoginSignup = ({ onClose }) => {
             <p>ID</p>
             <LoginSignupInput
               placeholder="&nbsp; email 형식으로 작성해주세요"
-              value={id}
-              onChange={handleIdChange}
+              value={email}
+              onChange={handleEmailChange}
             />
             <p>Password</p>
             <LoginSignupInput
@@ -103,8 +140,8 @@ const LoginSignup = ({ onClose }) => {
                 <p>Nickname</p>
                 <LoginSignupInput
                   placeholder="&nbsp; 닉네임"
-                  value={nickname}
-                  onChange={handleNicknameChange}
+                  value={username}
+                  onChange={handleUsernameChange}
                 />
               </>
             )}

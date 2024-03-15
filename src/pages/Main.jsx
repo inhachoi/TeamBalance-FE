@@ -21,6 +21,7 @@ import {
   StTmiAddButton,
 } from "./Main.module";
 
+
 //SECTION - 게임 진입 페이지
 const Main = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -86,7 +87,7 @@ const Main = () => {
 
   return (
     <>
-      {/* <Header /> */}
+      <Header />
 
       <StMainBox>
         {/* 가운데 부분 */}
