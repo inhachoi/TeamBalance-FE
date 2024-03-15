@@ -89,7 +89,7 @@ const LoginSignup = ({ onClose }) => {
       }
     },
     onError: (error) => {
-      console.log("로그인 실패 : ", error.status);
+      console.log("로그인 실패 : ", error);
     },
   });
 

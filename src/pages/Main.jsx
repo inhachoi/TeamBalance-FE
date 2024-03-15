@@ -21,7 +21,6 @@ import {
   StTmiAddButton,
 } from "./Main.module";
 
-
 //SECTION - 게임 진입 페이지
 const Main = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -53,18 +52,14 @@ const Main = () => {
     queryFn: tmiGames,
   });
 
-  // 게임 추가
-  const addGameMutation = useMutation({
-    mutationFn: (newGame) => {
-      return instance.post("/game", newGame);
-    },
-  });
+  // // 게임 삭제
+  // const deleteTmiMutation = useMutation((id) =>
+  //   instance.delete(`/games/${id}`)
+  // );
 
-  // 게임 삭제
-  const deleteTmiMutation = useMutation((id) => instance.delete(`/games/${id}`));
-  const handleDeleteTmi = (id) => {
-    deleteTmiMutation.mutate(id);
-  };
+  // const handleDeleteTmi = (id) => {
+  //   deleteTmiMutation.mutate(id);
+  // };
 
   useEffect(() => {
     if (!isModalOpen) {
@@ -77,11 +72,9 @@ const Main = () => {
   }, [isModalOpen]);
 
   if (isLoading) {
-    console.log(data);
     return <div>Loading...</div>;
   }
   if (isError) {
-    console.log(data);
     return <div>Error fetching data</div>;
   }
 
@@ -106,7 +99,7 @@ const Main = () => {
         {/* 밑 부분 */}
         <h2>&nbsp;&nbsp;모든 TMI 밸런스 게임 🔥</h2>
         <div>
-          {data.map((item) => (
+          {data.data.map((item) => (
             <Link key={item.id} to={`/detail/${item.id}`}>
               <StTmi>
                 {item.gameTitle}
@@ -128,7 +121,7 @@ const Main = () => {
       {isModalOpen && (
         <Modal
           onClose={closeModal}
-          onAddTmi={addGameMutation}
+          // onAddTmi={addGameMutation}
           values={values}
           onChange={handleInputChange}
         />
@@ -138,19 +131,33 @@ const Main = () => {
 };
 
 // 모달
-const Modal = ({ onClose, onAddTmi, values, onChange }) => {
-  const { gameTitle, choiceA, choiceB } = values;
+const Modal = ({ onClose, values, onChange }) => {
+  const { newGame, gameTitle, choiceA, choiceB } = values;
 
-  const handleFormSubmit = () => {
-    onAddTmi();
+  // 게임 추가 통신
+  const addGameMutation = useMutation({
+    mutationFn: addGame,
+    onSuccess: (data) => {
+      console.log("추가하기 성공 : ", data);
+      return onClose;
+    },
+    onError: (error) => {
+      console.log("추가하기 실패 : ", error);
+    },
+  });
+
+  // 추가 버튼 함수
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    console.log(newGame);
+    addGameMutation.mutate(newGame);
   };
 
   return (
     <StModalOverlay>
       <StModalForm onSubmit={handleFormSubmit}>
-        {" "}
         {/* 수정: form 태그 추가 */}
-        <StModalCloseButton onClick={onClose}>X</StModalCloseButton>{" "}
+        <StModalCloseButton onClick={onClose}>X</StModalCloseButton>
         {/* 수정: onSubmit 제거 */}
         <h2>TMI 밸런스 추가</h2>
         <div>
