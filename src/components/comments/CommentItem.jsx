@@ -1,16 +1,19 @@
 import React from "react";
-import { StComment } from "./Comment.module";
+import { StComment, StCommentSection } from "./Comment.module";
 
-export const CommentItem = ({ userId, content }) => {
+export const CommentItem = ({ id, body }) => {
   const handleDelete = () => {
-    console.log('댓글 삭제:', content);
+    console.log('댓글 삭제:', body);
   };
 
   return (
+    <StCommentSection>
     <StComment>
-      <span>{userId}: </span>
-      <span>{content}</span>
-      <button onClick={handleDelete}>x</button>
+      <div>👤{id} </div>
+      <span>{body}</span>
     </StComment>
+          <button onClick={handleDelete}>수정</button>
+          <button onClick={handleDelete}>삭제</button>
+    </StCommentSection>
   );
 };
