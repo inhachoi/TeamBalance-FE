@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import Header from "../components/header/Header";
-import api from "../axios/api";
+import { instance } from "../axios/api";
 import { tmiGames, addGame } from "../axios/tmiGames";
-import { useQuery, useMutation, QueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import {
   StMainBox,
@@ -56,12 +56,12 @@ const Main = () => {
   // 게임 추가
   const addGameMutation = useMutation({
     mutationFn: (newGame) => {
-      return api.post("/game", newGame);
+      return instance.post("/game", newGame);
     },
   });
 
   // 게임 삭제
-  const deleteTmiMutation = useMutation((id) => api.delete(`/games/${id}`));
+  const deleteTmiMutation = useMutation((id) => instance.delete(`/games/${id}`));
   const handleDeleteTmi = (id) => {
     deleteTmiMutation.mutate(id);
   };
