@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import Header from "../components/header/Header";
 import api from "../axios/api";
+import { tmiGames, addGame } from "../axios/tmiGames";
+import { useQuery, useMutation, QueryClient } from "@tanstack/react-query";
 import {
   StMainBox,
   StTodayTmiBox,
@@ -17,7 +19,6 @@ import {
   StModalInput,
   StTmiAddButton,
 } from "./Main.module";
-import { useQuery, useMutation, QueryClient } from "@tanstack/react-query";
 
 //SECTION - 게임 진입 페이지
 const Main = () => {
@@ -44,39 +45,18 @@ const Main = () => {
     });
   };
 
-  const queryClient = new QueryClient();
-
-  // 게임 리스트 받아오기
-  const getTmiGames = async () => {
-    const response = await api.get("/games");
-    return response.data; // 수정: response.data로 수정
-  };
-
-  const { data, isLoading, isError } = useQuery("games", getTmiGames); // 수정: 인수로 객체 형식의 옵션 전달
+  // 데이터 받아오기
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["games"],
+    queryFn: tmiGames,
+  });
 
   // 게임 추가
-  const addGame = async (value) => {
-    try {
-      const response = await api.post("/game", value);
-      console.log(response);
-      return response.data; // 수정: response.data로 수정
-    } catch (error) {
-      console.log(error.response);
-    }
-  };
-
-  const addGameMutation = useMutation(addGame, {
-    // 수정: useMutation 호출 형식 변경
-    onSuccess: (data) => {
-      console.log("게임추가 성공", data);
-      if (data.status === 200) {
-        alert("게임추가 성공!!!");
-      }
+  const addGameMutation = useMutation({
+    mutationFn: (newGame) => {
+      return api.post('/game', newGame)
     },
-    onError: (error) => {
-      console.log("게임 추가 오류 : ", error);
-    },
-  });
+  })
 
   // 게임 삭제
   const deleteTmiMutation = useMutation((id) => api.delete(`/games/${id}`));
@@ -94,12 +74,18 @@ const Main = () => {
     }
   }, [isModalOpen]);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error fetching data</div>;
+  if (isLoading) {
+    console.log(data)
+    return <div>Loading...</div>;
+  } 
+  if (isError){
+    console.log(data)
+    return <div>Error fetching data</div>;
+  } 
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
 
       <StMainBox>
         {/* 가운데 부분 */}
