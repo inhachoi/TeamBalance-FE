@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import logoImg from "../../img/logo.png";
 import {
   HeaderBar,
@@ -15,6 +15,7 @@ import { removeLocalStorage } from "../../utils/storageUtils";
 
 const Header = () => {
   const navigate = useNavigate();
+  const username = localStorage.getItem("username");
 
   const logoutMutaion = useMutation({
     mutationFn: logoutUser,
@@ -36,11 +37,15 @@ const Header = () => {
     logoutMutaion.mutate(refreshToken);
   };
 
+  const handleLogoClick = () => {
+    navigate("/main");
+  };
+
   return (
     <HeaderBar>
-      <HeaderLogo src={logoImg} />
+      <HeaderLogo src={logoImg} onClick={handleLogoClick} />
       <HeaderRightBar>
-        <HeaderNickName>AA님</HeaderNickName>
+        <HeaderNickName>{username}&nbsp; 님 </HeaderNickName>
         <HeaderLogoutButton onClick={handleLogOutClick}>
           로그아웃
         </HeaderLogoutButton>
