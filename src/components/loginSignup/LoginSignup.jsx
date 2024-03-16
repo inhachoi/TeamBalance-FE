@@ -79,17 +79,20 @@ const LoginSignup = ({ onClose }) => {
   const loginMutation = useMutation({
     mutationFn: loginUser,
     onSuccess: (data) => {
-      const refreshToken = data.data;
+      const refreshToken = data.data.refreshToken;
       const accessToken = data.headers.authorization;
       if (data.status === 200) {
         setLocalStorage(accessToken);
         setCookie("refreshToken", refreshToken);
-        // alert(`${data.data}님 로그인 성공하였습니다. 메인페이지로 이동합니다!`);
+        alert(
+          `${data.data.username}님 로그인 성공하였습니다. 메인페이지로 이동합니다!`
+        );
         navigate("/main");
       }
     },
     onError: (error) => {
       console.log("로그인 실패 : ", error);
+      alert("로그인에 실패하였습니다!");
     },
   });
 
