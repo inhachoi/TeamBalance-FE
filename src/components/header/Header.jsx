@@ -12,7 +12,6 @@ import { useMutation } from "@tanstack/react-query";
 import { logoutUser } from "../../axios/LoginSignupAxios";
 import { getCookie, removeCookie } from "../../utils/cookieUtils";
 import { removeLocalStorage } from "../../utils/storageUtils";
-// import { Cookies } from "react-cookie";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -20,14 +19,15 @@ const Header = () => {
   const logoutMutaion = useMutation({
     mutationFn: logoutUser,
     onSuccess: (data) => {
-      removeCookie("refreshToken");
-      removeLocalStorage("accessToken");
-      navigate("/");
-      // if (data.status === 200) {
-      // }
+      if (data.status === 200) {
+        removeCookie("refreshToken");
+        removeLocalStorage("accessToken");
+        alert(data.data);
+        navigate("/");
+      }
     },
     onError: (error) => {
-      // console.log("로그아웃 실패 ", error);
+      console.log("로그아웃 실패 ", error);
     },
   });
 
