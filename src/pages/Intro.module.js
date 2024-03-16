@@ -15,9 +15,9 @@ const IntroLeft = styled.div`
 `;
 
 const IntroLeftContent = styled.div`
-  position: absolute;
-  top: 25%;
-  left: 20%;
+  position: relative;
+  top: 250px;
+  left: 170px;
   gap: 25px;
 `;
 
