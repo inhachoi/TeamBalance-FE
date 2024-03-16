@@ -5,18 +5,42 @@ import Main from "../pages/Main";
 import Detail from "../pages/Detail";
 import { ThemeProvider } from "styled-components";
 import theme from "../styles/theme";
+import Header from '../components/header/Header'
+
+import { QueryClient, QueryClientProvider } from 'react-query';
+
+
+const queryClient = new QueryClient();
 
 const Router = () => {
   return (
-    <BrowserRouter>
-      <ThemeProvider theme={theme}>
-        <Routes>
-          <Route path="/" element={<Intro />} />
-          <Route path="/main" element={<Main />} />
-          <Route path="/detail" element={<Detail />} />
-        </Routes>
-      </ThemeProvider>
-    </BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <ThemeProvider theme={theme}>
+          <Routes>
+            <Route path="/" element={<Intro />} /> 
+            <Route
+              path="/main"
+              element={
+                <>
+                  <Header /> 
+                  <Main />
+                </>
+              }
+            />
+            <Route
+              path="/detail/:id"
+              element={
+                <>
+                  <Header /> 
+                  <Detail />
+                </>
+              }
+            /> 
+          </Routes>
+        </ThemeProvider>
+      </BrowserRouter>
+    </QueryClientProvider>
   );
 };
 

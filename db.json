@@ -1,0 +1,76 @@
+{
+  "tmiList": [
+    {
+      "id": "1",
+      "gameTitle": "여행 어디가지?",
+      "choiceA": "강원도",
+      "choiceB": "제주도"
+    },
+    {
+      "id": "2",
+      "gameTitle": "돈까스 좋아해?",
+      "choiceA": "일식",
+      "choiceB": "경양식"
+    },
+    {
+      "id": "3",
+      "gameTitle": "어떤 스타일이 좋아?",
+      "choiceA": "귀여운",
+      "choiceB": "단아한"
+    },
+    {
+      "id": "4",
+      "gameTitle": "리액트 좋아?",
+      "choiceA": "좋...아...",
+      "choiceB": "응 싫어~"
+    },
+    {
+      "id": "5",
+      "gameTitle": "음악 취향이?",
+      "choiceA": "팝송",
+      "choiceB": "발라드"
+    },
+    {
+      "id": "00f3",
+      "gameTitle": "ㅇㄴㅇ",
+      "choiceA": "ㄴㅇㄴ",
+      "choiceB": "ㄴㅇㄴ"
+    },
+    {
+      "id": "2f40",
+      "gameTitle": "ㄴㅇㄴ",
+      "choiceA": "ㅇㄴㅇ",
+      "choiceB": "ㄴㅇㄴ"
+    },
+    {
+      "id": "5255",
+      "gameTitle": "ㄴㄴㄴㄴㄴ",
+      "choiceA": "ㄴㄴㄴㄴㄴ",
+      "choiceB": "ㄴ"
+    },
+    {
+      "id": "6383",
+      "gameTitle": "ㅇㄴㅇ",
+      "choiceA": "ㄴㅇㄴ",
+      "choiceB": "ㄴㅇㄴ"
+    },
+    {
+      "id": "d585",
+      "gameTitle": "ㄴㄴㄴㄴㄴㄴㄴ",
+      "choiceA": "ㄴㄴㄴㄴㄴㄴㄴ",
+      "choiceB": "ㄴㄴㄴㄴ"
+    },
+    {
+      "id": "c3c4",
+      "gameTitle": "sss",
+      "choiceA": "ss",
+      "choiceB": "ss"
+    },
+    {
+      "id": "6dd8",
+      "gameTitle": "어떤 스타일 좋아해?",
+      "choiceA": "귀여운",
+      "choiceB": "섹시한"
+    }
+  ]
+}

@@ -3,6 +3,7 @@ import { Container, OptionContainer } from "./Game.module";
 import { Option } from "./Game.module";
 import { VS } from "./Game.module";
 import styled from "styled-components";
+import { useParams } from 'react-router-dom';
 
 
 const GameChoicePercent = () => {
@@ -10,6 +11,32 @@ const GameChoicePercent = () => {
   const [isRunning, setIsRunning] = useState(false); // 게이지가 채워지고 있는지 여부
   const [filledA, setFilledA] = useState(0); // A 옵션의 게이지 채움 정도
   const [filledB, setFilledB] = useState(0); // B 옵션의 게이지 채움 정도
+  const [gameTitle, setGameTitle] = useState(""); // API에서 가져온 게임 제목
+  const [choiceA, setChoiceA] = useState(""); // API에서 가져온 선택 A
+  const [choiceB, setChoiceB] = useState(""); // API에서 가져온 선택 B
+
+
+  const { id } = useParams();
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/tmiList");
+        const data = await response.json();
+        // 데이터에서 해당 ID를 가진 게임 데이터를 찾습니다.
+        const gameDataById = data.find(item => item.id === id);
+      if (gameDataById) {
+        setGameTitle(gameDataById.gameTitle);
+        setChoiceA(gameDataById.choiceA);
+        setChoiceB(gameDataById.choiceB);
+      }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   // 선택된 옵션이 변경될 때마다 게이지를 채웁니다.
   useEffect(() => {
@@ -33,13 +60,11 @@ const GameChoicePercent = () => {
     setIsRunning(true); // 게이지 채움 시작
   };
 
-
-
   return (
     <div>
       <div>Balance Game</div>
       <Container>
-        <div>더 좋아하는 중식은?</div>
+        <div>{gameTitle}</div> {/* Display the fetched game title here */}
         <OptionContainer>
           <Option
             active={selectedOption === "A"}
@@ -47,7 +72,7 @@ const GameChoicePercent = () => {
             className={selectedOption === "A" ? "selected" : ""}
             disabled={isRunning}
           >
-            짜장
+            {choiceA}
           </Option>{" "}
           <VS> vs </VS>
           <Option
@@ -56,29 +81,24 @@ const GameChoicePercent = () => {
             className={selectedOption === "B" ? "selected" : ""}
             disabled={isRunning}
           >
-            짬뽕
+            {choiceB}
           </Option>
         </OptionContainer>
       </Container>
 
       <ProgressBarWrapper>
         <ProgressBarContainer>
-        <ProgressBarFillA filled={filledA} active={selectedOption === "A"}></ProgressBarFillA>
+          <ProgressBarFillA filled={filledA} active={selectedOption === "A"}></ProgressBarFillA>
           <ProgressBarFillB filled={filledB} active={selectedOption === "B"}></ProgressBarFillB>
-
-          
         </ProgressBarContainer>
         <ProgressBarText>
           <div>{filledA}%,</div>
           <div>{filledB}%</div> 
         </ProgressBarText>
       </ProgressBarWrapper>
-
-
     </div>
   );
 };
-
 
 const ProgressBarWrapper = styled.div`
   display: flex;
@@ -118,12 +138,10 @@ export const ProgressBarFillB = styled.div`
 `;
 
 const ProgressBarText = styled.span`
-margin-top: 5px;
-    display: flex;
-    justify-content: space-between;
-    width: 70%;
+  margin-top: 5px;
+  display: flex;
+  justify-content: space-between;
+  width: 70%;
 `;
-
-
 
 export default GameChoicePercent;
