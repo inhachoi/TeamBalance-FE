@@ -7,7 +7,7 @@ import { StCommentsSection, StCommentInput, StItemSection, StCommentInputForm, S
 const fetchComments = async (id) => {
   const response = await fetch(`http://52.78.86.206:8080/api/game/${id}/comment`);
   if (!response.ok) {
-    throw new Error('Failed to fetch comments');
+    throw new Error('댓글을 불러오는 데 실패했습니다');
   }
   return response.json();
 };
@@ -21,7 +21,7 @@ const submitComment = async (id, newComment) => {
     body: JSON.stringify({ content: newComment }),
   });
   if (!response.ok) {
-    throw new Error('Failed to submit comment');
+    throw new Error('댓글을 제출하는 데 실패했습니다');
   }
   return response.json();
 };
@@ -31,13 +31,13 @@ export default function CommentList({ id }) {
   const [showComments, setShowComments] = useState(false);
   const [buttonVisible, setButtonVisible] = useState(true);
 
-  const { data: comments = [], isLoading, isError } = useQuery(['comments', id], () => fetchComments(id));
+  const { data: comments = [], isLoading, isError, refetch } = useQuery(['comments', id], () => fetchComments(id));
 
   const mutation = useMutation((comment) => submitComment(id, comment), {
     onSuccess: () => {
       setNewComment('');
       // 댓글 추가 후 댓글 다시 불러오기
-      fetchComments(id);
+      refetch();
     },
   });
 
@@ -57,7 +57,7 @@ export default function CommentList({ id }) {
 
   return (
     <StCommentsSection>
-      🗨댓글 {isLoading ? '로딩 중' : isError ? '댓글을 불러오는 중 오류가 발생했습니다' : comments.length}개
+      🗨댓글 {isLoading ? '로딩 중' : isError ? '댓글을 불러오는 중 오류가 발생했습니다' : comments.length}
 
       <StCommentInputForm onSubmit={handleCommentSubmit}>
         <StCommentInput
