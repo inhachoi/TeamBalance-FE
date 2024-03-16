@@ -22,6 +22,8 @@ export const StTodayTmiBox = styled.div`
     position: relative;
     top: 2px;
   }
+  text-decoration: none;
+  color: black;
 `;
 export const StTodayTmiChoiceA = styled.button`
   width: 400px;
@@ -74,10 +76,10 @@ export const StTmi = styled.button`
     position: relative;
     top: 2px;
   }
+  
 `;
 export const StDeleteButton = styled.button`
-
-`
+`;
 export const StAddModalOpenButton = styled.button`
   position: fixed;
   bottom: 20px;
