@@ -8,8 +8,13 @@ const tmiGames = async () => {
 };
 
 const addGame = async (newGame) => {
-  console.log(newGame);
+  console.log('choi');
+  console.log(newGame)
   await authInstance.post("/game", newGame);
 };
 
-export { tmiGames, addGame };
+const deleteGame = async (id) => {
+  await authInstance.delete(`/game/${id}`)
+}
+
+export { tmiGames, addGame, deleteGame };
