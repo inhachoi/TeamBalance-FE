@@ -1,32 +1,29 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import axios from "axios"; 
+import { useEffect, useState } from "react";
+import Header from "../components/header/Header";
+import { instance } from "../axios/api";
+import { tmiGames, addGame, deleteGame } from "../axios/tmiGames";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { NavLink } from "react-router-dom";
-
+import {
+  StMainBox,
+  StTodayTmiBox,
+  StTodayTmiChoiceA,
+  StTodayTmiChoiceB,
+  StVs,
+  StTmiBox,
+  StTmi,
+  StDeleteButton,
+  StAddModalOpenButton,
+  StModalOverlay,
+  StModalForm, // 수정: StModalForm으로 변경
+  StModalCloseButton,
+  StModalInput,
+  StTmiAddButton,
+} from "./Main.module";
 
 //SECTION - 게임 진입 페이지
 const Main = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [values, setValues] = useState({
-    gameTitle: "",
-    choiceA: "",
-    choiceB: "",
-  });
-  const [tmiList, setTmiList] = useState([]);
-
-  // 데이터 가져오기
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("http://localhost:5000/tmiList");
-        setTmiList(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -36,43 +33,36 @@ const Main = () => {
     setIsModalOpen(false);
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setValues({
-      ...values,
-      [name]: value,
-    });
+  // 데이터 받아오기
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["games"],
+    queryFn: tmiGames,
+  });
+
+  // 게임 삭제
+  const deleteTmiMutation = useMutation({
+    mutationFn: deleteGame,
+    onSuccess: (data) => {
+      console.log("삭제 성공 : ", data);
+    },
+    onError: (error) => {
+      console.log("삭제 실패 : ", error);
+    },
+  });
+
+  // 삭제 버튼 함수
+  const handleDeleteGame = async (e) => {
+    deleteTmiMutation.mutate(e);
   };
 
-  const handleAddTmi = async () => {
-    const { gameTitle, choiceA, choiceB } = values;
-    if (gameTitle && choiceA && choiceB) {
-      try {
-        const newTmi = {
-          gameTitle,
-          choiceA,
-          choiceB,
-        };
-        await axios.post("http://localhost:5000/tmiList", newTmi);
-        setTmiList(prevTmiList => [...prevTmiList, newTmi]); 
-        closeModal();
-      } catch (error) {
-        console.error("Error adding new TMI:", error);
-      }
-    } else {
-      alert("빈 칸을 채워주세요 ㅠㅠ");
-    }
-  };
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+  if (isError) {
+    return <div>Error fetching data</div>;
+  }
 
-  useEffect(() => {
-    if (!isModalOpen) {
-      setValues({
-        gameTitle: "",
-        choiceA: "",
-        choiceB: "",
-      });
-    }
-  }, [isModalOpen]);
+  const randomIndex = Math.floor(Math.random() * data.data.length);
 
   return (
     <>
@@ -81,13 +71,17 @@ const Main = () => {
 
       <StMainBox>
         {/* 가운데 부분 */}
-        <h2>&nbsp;&nbsp;&nbsp;&nbsp;🎉 오늘의 TMI 밸런스 게임 🎉</h2>
+        <h2>&nbsp;&nbsp;&nbsp;&nbsp;🎉 추천 TMI 밸런스 게임 🎉</h2>
         <StTodayTmiBox>
-          <h2>중식중에 뭐가 더 좋아?</h2>
+          <h2>{data.data[randomIndex].gameTitle}</h2>
           <div>
-            <StTodayTmiChoiceA>짜장면</StTodayTmiChoiceA>
+            <StTodayTmiChoiceA>
+              {data.data[randomIndex].choiceA}
+            </StTodayTmiChoiceA>
             <StVs>VS</StVs>
-            <StTodayTmiChoiceB>짬뽕</StTodayTmiChoiceB>
+            <StTodayTmiChoiceB>
+              {data.data[randomIndex].choiceB}
+            </StTodayTmiChoiceB>
           </div>
         </StTodayTmiBox>
       </StMainBox>
@@ -95,12 +89,20 @@ const Main = () => {
       <StTmiBox>
         <h2>&nbsp;&nbsp;모든 TMI 밸런스 게임 🔥</h2>
         <div>
-          {tmiList.map((tmi, index) => (
-            <NavLink key={index} to={`/detail/${tmi.id}`} activeClassName="active">
-              {/* 각 게임 클릭시 네비게이션을 이용하여 디테일 페이지로 이동 */}
-              <StTmi>{tmi.gameTitle}</StTmi>
-            </NavLink>
-          ))}
+          {data.data.length > 0 ? (
+            data.data.map((item) => (
+              <NavLink key={item.id} to={`/detail/${tmi.id}`} activeClassName="active">
+                <StTmi>
+                  {item.gameTitle}
+                  <StDeleteButton onClick={() => handleDeleteGame(item.id)}>
+                    X
+                  </StDeleteButton>
+                </StTmi>
+              </Link>
+            ))
+          ) : (
+            <StTmi>No Data</StTmi>
+          )}
         </div>
       </StTmiBox>
 
@@ -110,29 +112,63 @@ const Main = () => {
       </StAddModalOpenButton>
 
       {/* 모달 */}
-      {isModalOpen && (
-        <Modal
-          onClose={closeModal}
-          onAddTmi={handleAddTmi}
-          values={values}
-          onChange={handleInputChange}
-        />
-      )}
+      {isModalOpen && <Modal onClose={closeModal} />}
     </>
   );
 };
 
 // 모달
-const Modal = ({ onClose, onAddTmi, values, onChange }) => {
-  const { gameTitle, choiceA, choiceB } = values;
+const Modal = ({ onClose }) => {
+  const [gameTitle, setGameTitle] = useState("");
+  const [choiceA, setChoiceA] = useState("");
+  const [choiceB, setChoiceB] = useState("");
 
-  const handleAddClick = () => {
-    onAddTmi();
+  const handleGameTitleChange = (e) => {
+    const gameTitle = e.target.value;
+    setGameTitle(gameTitle);
+  };
+  const handleChoiceAChange = (e) => {
+    const choiceA = e.target.value;
+    setChoiceA(choiceA);
+  };
+  const handleChoiceBChange = (e) => {
+    const choiceB = e.target.value;
+    setChoiceB(choiceB);
+  };
+
+  const newGame = {
+    gameTitle,
+    choiceA,
+    choiceB,
+  };
+
+  // 게임 추가 통신
+  const addGameMutation = useMutation({
+    mutationFn: addGame,
+    onSuccess: (data) => {
+      console.log("추가하기 성공 : ", data);
+      console.log(data);
+      return onClose;
+    },
+    onError: (error) => {
+      console.log("추가하기 실패 : ", error);
+    },
+  });
+
+  // 추가 버튼 함수
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    console.log(newGame);
+    addGameMutation.mutate(newGame);
+    setGameTitle("");
+    setChoiceA("");
+    setChoiceB("");
+    onClose();
   };
 
   return (
     <StModalOverlay>
-      <StModalBox>
+      <StModalForm onSubmit={handleFormSubmit}>
         <StModalCloseButton onClick={onClose}>X</StModalCloseButton>
         <h2>TMI 밸런스 추가</h2>
         <div>
@@ -141,7 +177,7 @@ const Modal = ({ onClose, onAddTmi, values, onChange }) => {
             type="text"
             name="gameTitle"
             value={gameTitle}
-            onChange={onChange}
+            onChange={handleGameTitleChange}
           />
         </div>
         <div>
@@ -150,7 +186,7 @@ const Modal = ({ onClose, onAddTmi, values, onChange }) => {
             type="text"
             name="choiceA"
             value={choiceA}
-            onChange={onChange}
+            onChange={handleChoiceAChange}
           />
         </div>
         <div>
@@ -159,11 +195,11 @@ const Modal = ({ onClose, onAddTmi, values, onChange }) => {
             type="text"
             name="choiceB"
             value={choiceB}
-            onChange={onChange}
+            onChange={handleChoiceBChange}
           />
         </div>
         <div>
-          <StTmiAddButton onClick={handleAddClick}>추가하기</StTmiAddButton>
+          <StTmiAddButton type="submit">추가하기</StTmiAddButton>{" "}
         </div>
       </StModalBox>
     </StModalOverlay>

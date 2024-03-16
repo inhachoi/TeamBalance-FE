@@ -75,6 +75,9 @@ export const StTmi = styled.button`
     top: 2px;
   }
 `;
+export const StDeleteButton = styled.button`
+
+`
 export const StAddModalOpenButton = styled.button`
   position: fixed;
   bottom: 20px;
