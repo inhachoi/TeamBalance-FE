@@ -27,30 +27,43 @@ authInstance.interceptors.request.use(
 );
 
 //refresh token api
-// export const postRefreshToken = async () => {
-//   const response = await authInstance.post("/auth/refresh", {
-//     refreshToken: getCookie("refreshToken"),
-//   });
-//   console.log(response);
-//   return response;
-// };
+export const postRefreshToken = async () => {
+  try {
+    const data = await authInstance.post("/auth/refresh", {
+      refreshToken: getCookie("refreshToken"),
+    });
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error("토큰 갱신 중 오류 발생:", error);
+    throw error; // 필요한 경우 에러를 다른 곳에서 처리하기 위해 에러를 다시 던집니다.
+  }
+};
 
 /*TODO - accessToken이 만료되었을 경우 refreshToken을 발급받아서 accessToken에 갈아끼워 넣는다.*/
 authInstance.interceptors.response.use(
-  console.log("TEST"),
-  console.log(getCookie("refreshToken")),
-  // console.log(response),
-  // response 특이사항 없을 시 패스
-  (response) => response
-  // 에러 발생 시 토큰 만료된 경우로 새로운 토큰 발급하는 역할
-  //  console.error("1");
-  // async (error) => {
-  //   console.log(error);
-  //   const refreshToken = getCookie("refreshToken");
-  //   const data = await instance.post("/auth/refresh", refreshToken);
-  //   console.log(data);
-  //   const { accessToken } = data.refreschToken;
-  //   localStorage.setItem(accessToken);
-  //   return error;
-  // }
+  (response) => {
+    console.log("응답 인터셉트됨:", response, new Date());
+    return response;
+  },
+  async (error) => {
+    console.error("응답 오류 인터셉트됨:", error);
+    if (error.response) {
+      try {
+        // 토큰을 새로 고칩니다.
+        const data = await postRefreshToken();
+        console.log("새로 고친 토큰 데이터:", data);
+        const { accessToken } = data;
+        localStorage.setItem("accessToken", accessToken);
+        // 새 토큰을 사용하여 원래의 요청을 다시 보냅니다.
+        const originalRequest = error.config;
+        originalRequest.headers.Authorization = accessToken;
+        return authInstance(originalRequest);
+      } catch (refreshError) {
+        console.error("토큰을 새로 고치는 중 오류 발생:", refreshError);
+        return Promise.reject(error); // 원래의 요청에 대한 오류를 반환합니다.
+      }
+    }
+    return Promise.reject(error);
+  }
 );
