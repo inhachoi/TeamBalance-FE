@@ -3,7 +3,7 @@ import Header from "../components/header/Header";
 import { instance } from "../axios/api";
 import { tmiGames, addGame, deleteGame } from "../axios/tmiGames";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom"; // useHistory 추가
 import { Modal } from "../components/game/gameCreate";
 import {
   StMainBox,
@@ -20,6 +20,7 @@ import {
 //SECTION - 게임 진입 페이지
 const Main = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate(); // useHistory 사용
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -48,10 +49,9 @@ const Main = () => {
   });
 
   // 삭제 버튼 함수
-  const handleDeleteGame = async (e) => {
+  const handleDeleteGame = async (itemId) => {
     console.log("작은 버튼 눌림");
-    e.stopPropagation();
-    deleteTmiMutation.mutate(e);
+    deleteTmiMutation.mutate(itemId);
   };
 
   if (isLoading) {
@@ -62,6 +62,10 @@ const Main = () => {
   }
 
   const randomIndex = Math.floor(Math.random() * data.data.length);
+
+  const handleGameClick = (itemId) => {
+    navigate(`/detail/${itemId}`); // history.push로 변경
+  };
 
   return (
     <>
@@ -89,19 +93,17 @@ const Main = () => {
         <div>
           {data.data.length > 0 ? (
             data.data.map((item) => (
-              <NavLink
-                key={item.id}
-                to={`/detail/${item.id}`}
-                activeClassName="active"
-              >
-                {(onclick = () => console.log("큰 버튼 눌림"))}
-                <StTmi>
-                  {item.gameTitle}
-                  <StDeleteButton onClick={() => handleDeleteGame(item.id)}>
-                    X
-                  </StDeleteButton>
-                </StTmi>
-              </NavLink>
+              <StTmi key={item.id} onClick={() => handleGameClick(item.id)}>
+                {item.gameTitle}
+                <StDeleteButton
+                  onClick={(e) => {
+                    e.stopPropagation(); // 클릭 이벤트가 상위 요소로 전파되지 않도록 중단합니다.
+                    handleDeleteGame(item.id);
+                  }}
+                >
+                  X
+                </StDeleteButton>
+              </StTmi>
             ))
           ) : (
             <StTmi>No Data</StTmi>
