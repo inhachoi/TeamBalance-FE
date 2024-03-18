@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getLocalStorage, setLocalStorage } from "../utils/storageUtils";
+import { getLocalStorage } from "../utils/storageUtils";
 import { getCookie } from "../utils/cookieUtils";
 
 // 토큰이 필요 없는 경우

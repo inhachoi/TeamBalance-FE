@@ -49,6 +49,7 @@ const GameListBox = () => {
   const randomIndex = Math.floor(Math.random() * data.data.length);
 
   const handleGameClick = (itemId) => {
+    console.log(itemId);
     navigate(`/detail/${itemId}`);
   };
 
@@ -57,7 +58,7 @@ const GameListBox = () => {
       <StMainBox>
         {/* 가운데 부분 */}
         <h2>&nbsp;&nbsp;&nbsp;&nbsp;🎉 추천 TMI 밸런스 게임 🎉</h2>
-        <NavLink to={`/detail/${data.data[randomIndex]}`}>
+        <NavLink to={`/detail/${data.data[randomIndex].id}`}>
           <StTodayTmiBox>
             <h2>{data.data[randomIndex].gameTitle}</h2>
             <div>

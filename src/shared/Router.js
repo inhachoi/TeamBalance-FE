@@ -5,10 +5,9 @@ import Main from "../pages/Main";
 import Detail from "../pages/Detail";
 import { ThemeProvider } from "styled-components";
 import theme from "../styles/theme";
-import Header from '../components/header/Header'
+import Header from "../components/header/Header";
 
-import { QueryClient, QueryClientProvider } from 'react-query';
-
+import { QueryClient, QueryClientProvider } from "react-query";
 
 const queryClient = new QueryClient();
 
@@ -18,12 +17,12 @@ const Router = () => {
       <BrowserRouter>
         <ThemeProvider theme={theme}>
           <Routes>
-            <Route path="/" element={<Intro />} /> 
+            <Route path="/" element={<Intro />} />
             <Route
               path="/main"
               element={
                 <>
-                  <Header /> 
+                  <Header />
                   <Main />
                 </>
               }
@@ -32,11 +31,11 @@ const Router = () => {
               path="/detail/:id"
               element={
                 <>
-                  <Header /> 
+                  <Header />
                   <Detail />
                 </>
               }
-            /> 
+            />
           </Routes>
         </ThemeProvider>
       </BrowserRouter>
