@@ -1,9 +1,21 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(-20px); /* 위에서 아래로 이동하는 애니메이션 효과 */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0); /* 초기 위치로 복귀하는 애니메이션 효과 */
+  }
+`;
 
 // 본문 css
 export const StMainBox = styled.div`
   background-color: #d9d9d9;
   padding: 10px;
+  animation: ${fadeIn} 1s ease forwards;
 `;
 export const StTodayTmiBox = styled.div`
   min-width: 970px;
@@ -13,6 +25,7 @@ export const StTodayTmiBox = styled.div`
   background-color: white;
   border: none;
   border-radius: 10px;
+  box-shadow: 3px 3px 3px;
   cursor: pointer;
   &:hover {
     background-color: #f2f1ff;
@@ -34,6 +47,7 @@ export const StTodayTmiChoiceA = styled.button`
   background-color: #1a1c26;
   border-radius: 20px;
   font-size: 25px;
+  box-shadow: 5px 5px 5px gray;
   cursor: pointer;
 `;
 export const StTodayTmiChoiceB = styled.button`
@@ -44,6 +58,7 @@ export const StTodayTmiChoiceB = styled.button`
   background-color: #5d47e7;
   border-radius: 20px;
   font-size: 25px;
+  box-shadow: 5px 5px 5px gray;
   cursor: pointer;
 `;
 export const StVs = styled.span`
@@ -67,6 +82,7 @@ export const StTmi = styled.button`
   background-color: white;
   border-radius: 10px;
   font-weight: 1000;
+  box-shadow: 3px 3px 3px gray;
   cursor: pointer;
   &:hover {
     background-color: #f2f1ff;
@@ -76,9 +92,24 @@ export const StTmi = styled.button`
     position: relative;
     top: 2px;
   }
-  
+  opacity: 0; /* 초기에는 숨김 */
+  animation: ${fadeIn} 4s ease forwards; /* Fade in 애니메이션 적용 */
+  animation-delay: calc(
+    10s * var(--index)
+  ); /* 각 요소마다 약간씩 지연하여 순차적으로 나타나도록 설정 */
+`;
+export const StGameTitle = styled.div`
+  margin-bottom: 40px;
 `;
 export const StDeleteButton = styled.button`
+  margin: 0px 0px 20px 110px;
+  border-radius: 10px;
+  color: red;
+  background-color: white;
+  border: none;
+  &:hover {
+    background-color: pink;
+  }
 `;
 export const StAddModalOpenButton = styled.button`
   position: fixed;

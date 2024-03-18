@@ -4,6 +4,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import {
   StTmiBox,
   StTmi,
+  StGameTitle,
   StDeleteButton,
   StMainBox,
   StTodayTmiBox,
@@ -78,7 +79,6 @@ const GameListBox = () => {
           {data.data.length > 0 ? (
             data.data.map((item) => (
               <StTmi key={item.id} onClick={() => handleGameClick(item.id)}>
-                {item.gameTitle}
                 <StDeleteButton
                   onClick={(e) => {
                     e.stopPropagation(); // 클릭 이벤트가 상위 요소로 전파되지 않도록 중단합니다.
@@ -87,6 +87,7 @@ const GameListBox = () => {
                 >
                   X
                 </StDeleteButton>
+                <StGameTitle>{item.gameTitle}</StGameTitle>
               </StTmi>
             ))
           ) : (
