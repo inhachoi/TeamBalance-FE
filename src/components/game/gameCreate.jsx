@@ -43,20 +43,17 @@ export const Modal = ({ onClose }) => {
   const addGameMutation = useMutation({
     mutationFn: addGame,
     onSuccess: async (data) => {
-      console.log("추가하기 성공 : ", data);
-      console.log(data);
       await refetch();
       onClose();
     },
     onError: (error) => {
-      console.log("추가하기 실패 : ", error);
+      // console.log("추가하기 실패 : ", error);
     },
   });
 
   // 추가 버튼 함수
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    console.log(newGame);
     addGameMutation.mutate(newGame);
     setGameTitle("");
     setChoiceA("");

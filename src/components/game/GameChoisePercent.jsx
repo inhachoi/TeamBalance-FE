@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Container, OptionContainer } from "./Game.module";
+import { Container, OptionContainer, OptionTitle } from "./Game.module";
 import { Option } from "./Game.module";
 import { VS } from "./Game.module";
 import styled from "styled-components";
 
 const GameChoicePercent = ({ data }) => {
-  console.log(data.data);
   const [selectedOption, setSelectedOption] = useState("");
   const [isRunning, setIsRunning] = useState(false);
   const [filledA, setFilledA] = useState(0);
@@ -33,8 +32,8 @@ const GameChoicePercent = ({ data }) => {
 
   return (
     <div>
-      <div>{data.data.gameTitle}</div>
       <OptionContainer>
+        <h1>{data.data.gameTitle}</h1>
         <Option
           active={selectedOption === "A"}
           onClick={() => handleOptionClick("A")}
@@ -50,7 +49,7 @@ const GameChoicePercent = ({ data }) => {
           className={selectedOption === "B" ? "selected" : ""}
           disabled={isRunning}
         >
-          {data?.choiceB}
+          {data.data.choiceB}
         </Option>
       </OptionContainer>
       <ProgressBarWrapper>
