@@ -85,7 +85,6 @@ const LoginSignup = ({ onClose }) => {
         setLocalStorage(accessToken);
         setCookie("refreshToken", refreshToken);
         localStorage.setItem("username", data.data.username);
-        // setLocalStorage(data.data.username);
         alert(
           `${data.data.username}님 로그인 성공하였습니다. 메인페이지로 이동합니다!`
         );
