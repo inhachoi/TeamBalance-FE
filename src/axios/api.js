@@ -48,22 +48,36 @@ authInstance.interceptors.response.use(
   },
   async (error) => {
     console.error("응답 오류 인터셉트됨:", error);
-    if (error.response) {
-      try {
-        // 토큰을 새로 고칩니다.
-        const data = await postRefreshToken();
-        console.log("새로 고친 토큰 데이터:", data);
-        const { accessToken } = data;
-        localStorage.setItem("accessToken", accessToken);
-        // 새 토큰을 사용하여 원래의 요청을 다시 보냅니다.
-        const originalRequest = error.config;
-        originalRequest.headers.Authorization = accessToken;
-        return authInstance(originalRequest);
-      } catch (refreshError) {
-        console.error("토큰을 새로 고치는 중 오류 발생:", refreshError);
-        return Promise.reject(error); // 원래의 요청에 대한 오류를 반환합니다.
-      }
+    console.log("status : ", error.response.status);
+    if (error.response.status === 400) {
+      alert(`${error.response.data.message}`);
+      return Promise.reject(error);
     }
-    return Promise.reject(error);
   }
 );
+// authInstance.interceptors.response.use(
+//   (response) => {
+//     console.log("응답 인터셉트됨:", response, new Date());
+//     return response;
+//   },
+//   async (error) => {
+//     console.error("응답 오류 인터셉트됨:", error);
+//     if (error.response) {
+//       try {
+//         // 토큰을 새로 고칩니다.
+//         const data = await postRefreshToken();
+//         console.log("새로 고친 토큰 데이터:", data);
+//         const { accessToken } = data;
+//         localStorage.setItem("accessToken", accessToken);
+//         // 새 토큰을 사용하여 원래의 요청을 다시 보냅니다.
+//         const originalRequest = error.config;
+//         originalRequest.headers.Authorization = accessToken;
+//         return authInstance(originalRequest);
+//       } catch (refreshError) {
+//         console.error("토큰을 새로 고치는 중 오류 발생:", refreshError);
+//         return Promise.reject(error); // 원래의 요청에 대한 오류를 반환합니다.
+//       }
+//     }
+//     return Promise.reject(error);
+//   }
+// );
