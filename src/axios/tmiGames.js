@@ -13,8 +13,19 @@ const addGame = async (newGame) => {
   await authInstance.post("/game", newGame);
 };
 
-const deleteGame = async (id) => {
-  await authInstance.delete(`/game/${id}`)
+const getComment = async (id) => {
+  await authInstance.get(`/game/${id}comment`)
 }
 
-export { tmiGames, addGame, deleteGame };
+const getGame = async (id) => {
+  // console.log("getGame : ",id);
+  // const response = await authInstance.get(`/game/${id}`)
+  // console.log(response);
+  // return response;
+  return  await authInstance.get(`/game/${id}`);
+}
+const deleteGame = async (id) => {
+  await authInstance.delete(`/game/${id}`);
+}
+
+export { tmiGames, addGame, deleteGame ,getComment,getGame };

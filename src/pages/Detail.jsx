@@ -2,44 +2,28 @@ import React, { useState, useEffect } from "react";
 import GameChoicePercent from "../components/game/GameChoisePercent";
 import CommentList from "../components/comments/CommentList";
 import { useParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import {getGame} from '../axios/tmiGames'
 
 
 //SECTION - 게임 결과에 대한 상세 페이지
-
-
-
 const Detail = () => {
   const { id } = useParams();
-  const [gameInfo, setGameInfo] = useState(null);
 
-  useEffect(() => {
-    fetchGameInfo(id);
-  }, [id]);
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["games", id],
+    queryFn: () => getGame(id),
+  });
 
-  const fetchGameInfo = async (id) => {
-    try {
-      const response = await fetch(`http://3.34.181.200:8080/api/game/${id}`);
-      if (!response.ok) {
-        throw new Error("Failed to fetch game info");
-      }
-      const data = await response.json();
-      setGameInfo(data);
-    } catch (error) {
-      console.error("Error fetching game info:", error);
-    }
-  };
-
-  if (!gameInfo) {
-    return <div>  <GameChoicePercent gameInfo={gameInfo} />
-    <CommentList gameId={id} /></div>;
-  }
-
-  return (
-    <>
-      <GameChoicePercent gameInfo={gameInfo} />
-      <CommentList gameId={id} />
-    </>
-  );
+    console.log("Detail 페이지 > ",data);
+    return (
+      <>
+        <GameChoicePercent data={data} />
+        
+  
+      </>
+    );
 };
+
 
 export default Detail;
