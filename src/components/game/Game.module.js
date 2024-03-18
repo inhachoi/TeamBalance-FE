@@ -1,21 +1,19 @@
-
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const Container = styled.div`
-    background: white;
-    padding: 20px;
-    margin-left: 10%;
-    margin-right: 10%;
-    margin-top: 10%;
-    border-radius: 33px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    max-width: 200%;
-    overflow: hidden;
-    flex-direction: column;
-  
+  background: white;
+  padding: 20px;
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-top: 10%;
+  border-radius: 33px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 200%;
+  overflow: hidden;
+  flex-direction: column;
 `;
 
 export const OptionContainer = styled.div`
@@ -23,6 +21,7 @@ export const OptionContainer = styled.div`
   padding: 20px;
   border-radius: 33px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   margin: 36px;
@@ -36,7 +35,8 @@ export const OptionContainer = styled.div`
 `;
 
 export const Option = styled.div`
-  background: ${props => props.active ? '#5D47E7' : '#1B1A25'};
+  box-shadow: 5px 5px 5px gray;
+  background: ${(props) => (props.active ? "#5D47E7" : "#1B1A25")};
   color: white;
   padding: 100px 170px;
   margin: 10px 0;
@@ -54,12 +54,12 @@ export const Option = styled.div`
 `;
 
 export const VS = styled.div`
-      border-radius: 4px;
-    margin: 22px;
-    font-size: 46px;
+  border-radius: 4px;
+  margin: 22px;
+  font-size: 46px;
 
-    @media screen and (max-width: 940px) {
-        margin: 10px;
-        font-size: 26px;
+  @media screen and (max-width: 940px) {
+    margin: 10px;
+    font-size: 26px;
   }
 `;

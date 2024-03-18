@@ -45,7 +45,7 @@ const Intro = () => {
               <IntroTitleA>다함께 즐기는</IntroTitleA>
               <IntroTitleB>밸런스 게임</IntroTitleB>
             </IntroTitle>
-            <IntroSubTitle>124명이 함께 하고 있습니다</IntroSubTitle>
+            <IntroSubTitle>여러명이 함께 하고 있습니다</IntroSubTitle>
           </IntroLeftContent>
         </IntroLeft>
 

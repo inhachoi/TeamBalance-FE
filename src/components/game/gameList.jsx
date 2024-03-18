@@ -49,7 +49,6 @@ const GameListBox = () => {
   const randomIndex = Math.floor(Math.random() * data.data.length);
 
   const handleGameClick = (itemId) => {
-    console.log(itemId);
     navigate(`/detail/${itemId}`);
   };
 
